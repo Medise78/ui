@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1081124845511",
+    "project_id": "nahalit",
+    "storage_bucket": "nahalit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081124845511:android:093571288e4fb028794be2",
+        "android_client_info": {
+          "package_name": "com.medise.nahalit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081124845511-nn4nrk02tfkrpq0im2ic5ep0thl6122r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.medise.nahalit",
+            "certificate_hash": "d3ddf3e6269cdfa728d124f66781b12bd23a6b4b"
+          }
+        },
+        {
+          "client_id": "1081124845511-i0riuq87dvsijsc4a7assi0dai7sssgi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMKeHvnEmsqxQG6J0Q_yvhEoay91G-NZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081124845511-i0riuq87dvsijsc4a7assi0dai7sssgi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
