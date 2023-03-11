@@ -71,7 +71,11 @@ fun HomeScreen(
                 DrawerHeader()
                 Spacer(modifier = Modifier.height(5.dp))
                 DrawerBody(items = MenuItems.list) {
-
+                    when(it.id){
+                        10 -> {
+                            navController.navigate(Routes.RecruitmentScreen.route)
+                        }
+                    }
                 }
             }
         },

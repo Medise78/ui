@@ -33,6 +33,7 @@ import com.medise.nahalit.presentation.spalsh_screen.SplashScreen
 import com.medise.nahalit.presentation.about_screen.AboutScreen
 import com.medise.nahalit.presentation.buy_screen.BuyScreen
 import com.medise.nahalit.presentation.detail_screen.DetailScreen
+import com.medise.nahalit.presentation.favorite_screen.FavoriteScreen
 import com.medise.nahalit.presentation.home_screen.HomeScreen
 import com.medise.nahalit.presentation.home_screen.components.ExpandableSearchView
 import com.medise.nahalit.presentation.login_screen.LoginScreen
@@ -47,14 +48,7 @@ import com.medise.nahalit.presentation.ui.theme.ghost_white
 fun Dashboard(
     navController: NavHostController
 ) {
-    val scope = rememberCoroutineScope()
-    val scrollState = rememberLazyGridState()
     val scaffoldState = rememberScaffoldState()
-    val navControl = navController.currentBackStackEntryAsState()
-    val state = navControl.value?.destination?.route
-    val bottomBarState = rememberSaveable {
-        mutableStateOf(true)
-    }
 
 
     Surface(modifier = Modifier.fillMaxSize()) {
@@ -106,8 +100,9 @@ fun Dashboard(
                         }
                     }
                     composable(Routes.FavoriteScreen.route) {
-                        Text(text = "")
-
+                        EnterAnimation {
+                            FavoriteScreen(navController = navController)
+                        }
                     }
                     composable(Routes.ContactScreen.route) {
                         EnterAnimation {
@@ -131,7 +126,7 @@ fun CustomBottomBar(
     isShow: MutableState<Boolean> = mutableStateOf(true),
     bottomBarStatus: MutableState<Boolean> = mutableStateOf(true)
 ) {
-    val listItems = Routes.list
+    val listItems = Routes.list.reversed()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
