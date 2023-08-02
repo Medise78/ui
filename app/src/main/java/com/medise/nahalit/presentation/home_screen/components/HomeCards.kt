@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.medise.nahalit.R
@@ -37,7 +38,7 @@ import com.medise.nahalit.presentation.ui.theme.ghost_white
 
 @Composable
 fun ProductCard(
-    image: Int,
+    image: String,
     title: String,
     description: String,
     price: String,
@@ -69,8 +70,8 @@ fun ProductCard(
                         bottom.linkTo(titleConst.top)
                     }
             ) {
-                Image(
-                    painter = painterResource(id = image),
+                AsyncImage(
+                    model = image,
                     contentDescription = R.drawable.img.toString(),
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
@@ -154,14 +155,5 @@ fun ProductCard(
                 CustomButton(onBuyClick)
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun Test() {
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        ProductCard(image = R.drawable.pc, title = "hi", description = "hi", price = "5000", {}, {})
-
     }
 }

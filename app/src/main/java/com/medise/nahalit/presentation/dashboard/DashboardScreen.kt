@@ -24,9 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 import com.medise.nahalit.R
 import com.medise.nahalit.common.Routes
 import com.medise.nahalit.presentation.spalsh_screen.SplashScreen
@@ -36,6 +38,7 @@ import com.medise.nahalit.presentation.detail_screen.DetailScreen
 import com.medise.nahalit.presentation.favorite_screen.FavoriteScreen
 import com.medise.nahalit.presentation.home_screen.HomeScreen
 import com.medise.nahalit.presentation.home_screen.components.ExpandableSearchView
+import com.medise.nahalit.presentation.home_screen.view_model.HomeViewModel
 import com.medise.nahalit.presentation.login_screen.LoginScreen
 import com.medise.nahalit.presentation.profile_screen.ProfileScreen
 import com.medise.nahalit.presentation.recruitment_screen.RecruitmentScreen
@@ -72,7 +75,11 @@ fun Dashboard(
                             }
                         }
                     }
-                    composable(Routes.DetailScreen.route) {
+                    composable(Routes.DetailScreen.route + "/{id}" , arguments = listOf(
+                        navArgument("id"){
+                            type = NavType.IntType
+                        }
+                    )) {
                         EnterAnimation {
                             DetailScreen(navController)
                         }
@@ -209,7 +216,8 @@ fun TabIcons(
 @Composable
 fun CustomTopAppBar(
     isShow: MutableState<Boolean> = mutableStateOf(true),
-    onMenuItemClick: () -> Unit = {}
+    onMenuItemClick: () -> Unit = {},
+    homeViewModel: HomeViewModel
 ) {
     val textField = remember {
         mutableStateOf("")
@@ -235,6 +243,7 @@ fun CustomTopAppBar(
                         searchDisplay = textField.value,
                         onSearchDisplayChanged = {
                             textField.value = it
+                            homeViewModel.searchProduct(textField.value)
                         },
                         onSearchDisplayClosed = {
                             isUserShow = !isUserShow

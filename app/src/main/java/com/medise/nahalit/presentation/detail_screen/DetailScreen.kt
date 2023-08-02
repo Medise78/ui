@@ -1,6 +1,5 @@
 package com.medise.nahalit.presentation.detail_screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -25,8 +23,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.medise.nahalit.R
+import com.medise.nahalit.domain.model.product.ProductItem
 import com.medise.nahalit.presentation.detail_screen.component.TopBarWithBack
 import com.medise.nahalit.presentation.ui.theme.*
 
@@ -34,6 +35,9 @@ import com.medise.nahalit.presentation.ui.theme.*
 fun DetailScreen(
     navController: NavController
 ) {
+
+    val detailsScreenViewModel: DetailsScreenViewModel by hiltViewModel()
+
     var likeProduct by remember {
         mutableStateOf(false)
     }
@@ -55,25 +59,29 @@ fun DetailScreen(
                 .padding(top = 20.dp)
         ) {
             Column {
-                Content()
+                detailsScreenViewModel.state.value.success?.let { productItem -> Content(productItem) }
             }
         }
     }
 }
 
 @Composable
-fun Content() {
-    ProductItemsImage()
+fun Content(
+    productItem: ProductItem
+) {
+    ProductItemsImage(productItem.yoastHeadJson.ogImage.firstOrNull()?.url ?: "")
     Spacer(modifier = Modifier.height(30.dp))
-    ProductContent()
+    ProductContent(productItem)
     Spacer(modifier = Modifier.height(20.dp))
-    ProductAbout()
+    ProductAbout(productItem)
     Spacer(modifier = Modifier.height(40.dp))
     ProductAddToCart()
 }
 
 @Composable
-fun ProductContent() {
+fun ProductContent(
+    productItem: ProductItem?
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -83,13 +91,13 @@ fun ProductContent() {
     ) {
         Column {
             Text(
-                text = "طراحی وب سایت",
+                text = productItem?.yoastHeadJson?.ogTitle ?: "",
                 fontWeight = FontWeight.Bold,
                 fontSize = 28.sp,
                 color = pale_dark,
             )
             Text(
-                text = "Seo",
+                text = productItem?.date ?: "",
                 fontSize = 20.sp,
                 color = Color.Black.copy(0.3f),
             )
@@ -119,7 +127,7 @@ fun ProductContent() {
 }
 
 @Composable
-fun ProductAbout() {
+fun ProductAbout(productItem: ProductItem?) {
     Spacer(modifier = Modifier.padding(5.dp))
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -138,13 +146,18 @@ fun ProductAbout() {
             )
         }
         Text(
-            text = "یکی از خدمات اصلی سایت که برای بهبود فروش و شناخته شدن شما و افزایش بازدید سایت شما می باشد ، خدمات سئو سایت می باشد. با این خدمات شما می توانید در صفحه گوگل در جایگاه بالاتر قرار بگیرید. ",
+            text = productItem?.yoastHeadJson?.ogDescription ?: "",
             fontSize = 23.sp,
             color = Color.Black,
             fontWeight = FontWeight.Bold
         )
         Divider(modifier = Modifier.padding(vertical = 15.dp))
-        AboutProductRow(title = stringResource(id = R.string.product_page_title), desc = "4")
+        AboutProductRow(
+            title = stringResource(id = R.string.product_page_title),
+            desc = productItem?.yoastHeadJson?.schema?.graph?.find {
+                it.itemListElement.isEmpty().not()
+            }?.itemListElement?.size?.toString() ?: ""
+        )
         Divider(modifier = Modifier.padding(vertical = 15.dp))
         AboutProductRow(title = stringResource(R.string.size_title), desc = "124*200")
         Divider(modifier = Modifier.padding(vertical = 15.dp))
@@ -246,7 +259,9 @@ fun AboutProductRow(
 }
 
 @Composable
-fun ProductItemsImage() {
+fun ProductItemsImage(
+    image: String
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -258,8 +273,8 @@ fun ProductItemsImage() {
                 .height(210.dp),
             shape = RoundedCornerShape(20.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.img1),
+            AsyncImage(
+                model = image,
                 contentDescription = "Product Image",
                 modifier = Modifier
                     .fillMaxSize(),
